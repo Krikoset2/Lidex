@@ -69,6 +69,17 @@
             border: none;
             background: white;
         }
+        .resize-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: transparent;
+            z-index: 1000;
+            cursor: col-resize;
+        }
         .CodeMirror {
             height: 100%;
             font-size: 14px;
@@ -113,7 +124,6 @@
             background-color: rgba(30, 30, 30, 0.33);
             transition-duration: .5s;
         }
-
     </style>
 </head>
 <body>
@@ -126,6 +136,7 @@
             <iframe id="preview" sandbox="allow-scripts"></iframe>
         </div>
     </div>
+    <div class="resize-overlay" id="resize-overlay"></div>
     <button class="Btn" onclick="downloadHTML()">
         <svg class="svgIcon" viewBox="0 0 384 512" height="1em" xmlns="http://www.w3.org/2000/svg">
             <path d="M169.4 470.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 370.8 224 64c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 306.7L54.6 265.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"></path>
@@ -172,6 +183,7 @@
             const container = document.querySelector('.container');
             const editorSection = document.querySelector('.editor-section');
             const previewSection = document.querySelector('.preview-section');
+            const overlay = document.getElementById('resize-overlay');
 
             let isResizing = false;
             let startX;
@@ -183,6 +195,8 @@
                 startX = e.clientX;
                 startWidthLeft = editorSection.offsetWidth;
                 startWidthRight = previewSection.offsetWidth;
+                
+                overlay.style.display = 'block';
                 
                 document.addEventListener('mousemove', resize);
                 document.addEventListener('mouseup', stopResize);
@@ -206,6 +220,7 @@
 
             function stopResize() {
                 isResizing = false;
+                overlay.style.display = 'none';
                 document.removeEventListener('mousemove', resize);
                 document.removeEventListener('mouseup', stopResize);
                 document.body.style.cursor = '';
@@ -239,10 +254,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Example website</title>
+    <style>
+        h1 {
+            color: #123456;
+        }
+    </style>
   </head>
   <body>
     <main>
-        <h1>Website for example</h1>  
+        <h1>Website for example</h1>
     </main>
   </body>
 </html>`;
